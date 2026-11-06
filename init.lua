@@ -385,7 +385,7 @@ require('lazy').setup({
       { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'master' },
     },
     opts = {
-      ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+      ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'php', 'php_only', 'html', 'blade' },
       auto_install = false,
       highlight = { enable = true },
       indent = { enable = true },
