@@ -1,11 +1,10 @@
--- Unless you are still migrating, remove the deprecated commands from v1.x
+-- File explorer. See `:help neo-tree`.
 return {
   'nvim-neo-tree/neo-tree.nvim',
-  branch = 'v2.x',
+  branch = 'v3.x',
   -- keys = {
   --   { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" }
   -- },
-  version = '*',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
@@ -18,17 +17,6 @@ return {
   --   }
   -- }
   config = function()
-    -- Unless you are still migrating, remove the deprecated commands from v1.x
-    vim.cmd [[ let g:neo_tree_remove_legacy_commands = 1 ]]
-
-    -- If you want icons for diagnostic errors, you'll need to define them somewhere:
-    vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
-    vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
-    vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
-    vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
-    -- NOTE: this is changed from v1.x, which used the old style of highlight groups
-    -- in the form "LspDiagnosticsSignWarning"
-
     require('neo-tree').setup {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = 'rounded',
@@ -58,14 +46,14 @@ return {
           highlight = 'NeoTreeIndentMarker',
           -- expander config, needed for nesting files
           with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
-          expander_collapsed = '',
-          expander_expanded = '',
+          expander_collapsed = '\u{f460}',
+          expander_expanded = '\u{f47c}',
           expander_highlight = 'NeoTreeExpander',
         },
         icon = {
-          folder_closed = '',
-          folder_open = '',
-          folder_empty = 'ﰊ',
+          folder_closed = '\u{e5ff}',
+          folder_open = '\u{e5fe}',
+          folder_empty = '\u{f071c}', -- old Nerd Font v2 glyph no longer exists
           -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
           -- then these will never be used.
           default = '*',
@@ -86,13 +74,13 @@ return {
             added = '',    -- or "✚", but this is redundant info if you use git_status_colors on the name
             modified = '', -- or "", but this is redundant info if you use git_status_colors on the name
             deleted = '✖', -- this can only be used in the git_status source
-            renamed = '', -- this can only be used in the git_status source
+            renamed = '\u{f0055}', -- this can only be used in the git_status source
             -- Status type
-            untracked = '',
-            ignored = '',
-            unstaged = '',
-            staged = '',
-            conflict = '',
+            untracked = '\u{f128}',
+            ignored = '\u{f474}',
+            unstaged = '\u{f0131}',
+            staged = '\u{f046}',
+            conflict = '\u{e727}',
           },
         },
       },
@@ -184,7 +172,7 @@ return {
             --".null-ls_*",
           },
         },
-        follow_current_file = true,             -- This will find and focus the file in the active buffer every
+        follow_current_file = { enabled = true }, -- This will find and focus the file in the active buffer every
         -- time the current file is changed while the tree is open.
         group_empty_dirs = false,               -- when true, empty folders will be grouped together
         hijack_netrw_behavior = 'open_default', -- netrw disabled, opening a directory opens neo-tree
@@ -219,7 +207,7 @@ return {
         commands = {}, -- Add a custom command or override a global one using the same function name
       },
       buffers = {
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
+        follow_current_file = { enabled = true }, -- This will find and focus the file in the active buffer every
         -- time the current file is changed while the tree is open.
         group_empty_dirs = true,    -- when true, empty folders will be grouped together
         show_unloaded = true,
@@ -233,7 +221,7 @@ return {
       },
       git_status = {
         window = {
-          position = 'float',
+          position = 'left',
           mappings = {
             ['A'] = 'git_add_all',
             ['gu'] = 'git_unstage_file',
@@ -247,6 +235,7 @@ return {
       },
     }
 
-    vim.cmd [[nnoremap \ :Neotree reveal<cr>]]
+    vim.keymap.set('n', '\\', '<cmd>Neotree reveal<cr>', { desc = 'Reveal current file in Neo-tree' })
+    vim.keymap.set('n', '<leader>gt', '<cmd>Neotree git_status left toggle<cr>', { desc = '[G]it changes [T]ree' })
   end,
 }
