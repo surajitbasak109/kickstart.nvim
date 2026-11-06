@@ -197,12 +197,8 @@ require('lazy').setup({
       vim.lsp.enable(server_names)
 
       -- Laravel LSP (installed via `composer global require laravel/lsp`, not Mason,
-      -- so it is configured here rather than in the `servers` table above).
-      vim.lsp.config('laravel_lsp', {
-        cmd = { 'laravel-lsp' },
-        filetypes = { 'php', 'blade' },
-        root_markers = { 'artisan', 'composer.json', '.git' },
-      })
+      -- so it is enabled here rather than in the `servers` table above).
+      -- nvim-lspconfig supplies its cmd/filetypes/root_dir.
       vim.lsp.enable 'laravel_lsp'
     end,
   },
